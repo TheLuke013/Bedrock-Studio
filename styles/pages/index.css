@@ -1,0 +1,21 @@
+.tool-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.tool-img {
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tool-link:hover .tool-img {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.4);
+}
+
+.tool-link:hover p {
+    color: #0d6efd;
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedrock Studio - Java Mod Converter</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles/pages/java-mod-converter.css">
+</head>
+
+<body>
+    <header class="header-banner">
+        <a href="index.html">
+            <picture>
+                <!-- mobile -->
+                <source media="(max-width: 767.98px)" srcset="assets/images/bedrock-studio-logo.webp">
+
+                <!-- tablet -->
+                <source media="(max-width: 991.98px)" srcset="assets/images/bedrock-studio-logo.webp">
+
+                <!-- desktop -->
+                <img src="assets/images/bedrock-studio-logo.webp" alt="Bedrock Studio - Melhor ferramenta para o MCBE"
+                    class="img-fluid">
+            </picture>
+        </a>
+    </header>
+
+    <header class="header">
+    </header>
+
+    <main class="main-content">
+        <section class="converter-section">
+            <div class="text-center mb-4">
+                <i class="bi bi-file-earmark-zip jar-icon"></i>
+                <h1>Conversor de Mods Java</h1>
+                <p class="text-muted">Converta mods do Minecraft Java Edition para Bedrock Edition</p>
+            </div>
+            
+            <div class="mb-4">
+                <label for="modFile" class="form-label">
+                    <i class="bi bi-upload me-2"></i>Selecione o arquivo .jar
+                </label>
+                <input class="form-control" type="file" id="modFile" accept=".jar">
+                <div class="form-text">Tamanho máximo: 100MB</div>
+            </div>
+            
+            <div class="file-info-card" id="fileInfo">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-file-earmark-zip-fill fs-1 text-primary me-3"></i>
+                    <div>
+                        <h5 class="mb-1" id="fileName">arquivo.jar</h5>
+                        <p class="mb-0">Tamanho: <span id="fileSize">0 MB</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <button type="button" class="btn btn-primary w-100 py-3" id="convertBtn" disabled>
+                <i class="bi bi-arrow-repeat me-2"></i> Converter Mod
+            </button>
+            
+            <div class="result-container text-center mt-4" id="resultContainer">
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle-fill me-2"></i> Conversão realizada com sucesso!
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-download btn-lg py-3">
+                        <i class="bi bi-download me-2"></i> Baixar Mod Convertido
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="src/tools/java-mod-converter/java-mod-converter.js"></script>
+</body>
+
+</html>

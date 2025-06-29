@@ -1,0 +1,92 @@
+.converter-section {
+    background: rgba(18, 18, 18, 0.8);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
+    max-width: 800px;
+    margin: 2rem auto;
+}
+
+.file-info-card {
+    background: rgba(43, 43, 65, 0.5);
+    border: 1px solid var(--bs-primary);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    display: none;
+}
+
+.jar-icon {
+    font-size: 4rem;
+    color: var(--bs-primary);
+}
+
+.progress-container {
+    height: 8px;
+    background: #333;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 1.5rem 0;
+    display: none;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--bs-primary);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.result-container {
+    display: none;
+}
+
+.btn-primary {
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+    background: var(--bs-secondary);
+    border-color: var(--bs-secondary);
+}
+
+.btn-download {
+    background: #2ecc71;
+    border-color: #27ae60;
+}
+
+.btn-download:hover {
+    background: #27ae60;
+    border-color: #219653;
+}
+
+.mc-block {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background: #8A2BE2;
+    border: 2px solid #5D3FD3;
+    position: relative;
+    transform: rotate(45deg);
+    margin: 10px;
+}
+
+.mc-block:before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: #9b6ceb;
+    border: 1px solid #5D3FD3;
+}
+
+.feature-block {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 10px;
+    background: rgba(43, 43, 65, 0.4);
+    height: 100%;
+}
