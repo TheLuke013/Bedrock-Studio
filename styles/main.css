@@ -35,6 +35,7 @@ body {
     max-height: 300px;
     object-fit: contain;
     margin-bottom: 45px;
+    margin-top: 50px;
   }
 
 @import url('components/buttons.css');
