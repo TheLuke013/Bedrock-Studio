@@ -16,20 +16,12 @@
     <header class="header-banner">
         <a href="index.html">
             <picture>
-                <!-- mobile -->
                 <source media="(max-width: 767.98px)" srcset="assets/images/bedrock-studio-logo.webp">
-
-                <!-- tablet -->
                 <source media="(max-width: 991.98px)" srcset="assets/images/bedrock-studio-logo.webp">
-
-                <!-- desktop -->
                 <img src="assets/images/bedrock-studio-logo.webp" alt="Bedrock Studio - Melhor ferramenta para o MCBE"
                     class="img-fluid">
             </picture>
         </a>
-    </header>
-
-    <header class="header">
     </header>
 
     <main class="main-content">
@@ -38,6 +30,15 @@
                 <i class="bi bi-file-earmark-zip jar-icon"></i>
                 <h1>Conversor de Mods Java</h1>
                 <p class="text-muted">Converta mods do Minecraft Java Edition para Bedrock Edition</p>
+                <div class="alert alert-info">
+                    <h5>Como funciona?</h5>
+                    <ul class="text-start">
+                        <li>Extrai e descompila o mod Java</li>
+                        <li>Analisa o mod para determinar o que pode ser convertido</li>
+                        <li>Converte para formato Bedrock Edition</li>
+                        <li>Empacota como addon para Minecraft Bedrock</li>
+                    </ul>
+                </div>
             </div>
             
             <div class="mb-4">
@@ -62,6 +63,8 @@
                 <div class="progress-bar" id="progressBar"></div>
             </div>
             
+            <div class="status-container" id="statusText"></div>
+            
             <button type="button" class="btn btn-primary w-100 py-3" id="convertBtn" disabled>
                 <i class="bi bi-arrow-repeat me-2"></i> Converter Mod
             </button>
@@ -71,9 +74,30 @@
                     <i class="bi bi-check-circle-fill me-2"></i> Conversão realizada com sucesso!
                 </div>
                 
+                <div class="result-details">
+                    <h5>Detalhes do Mod Convertido</h5>
+                    <div class="row text-start">
+                        <div class="col-md-6 mb-3">
+                            <strong>Nome:</strong> <span id="modName">-</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Versão:</strong> <span id="modVersion">-</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Autores:</strong> <span id="modAuthors">-</span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>ModLoader:</strong> <span id="modLoader">-</span>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="d-grid gap-2">
                     <button class="btn btn-download btn-lg py-3">
                         <i class="bi bi-download me-2"></i> Baixar Mod Convertido
+                    </button>
+                    <button id="resetBtn" class="btn btn-reset mt-3">
+                        <i class="bi bi-arrow-repeat me-2"></i> Converter Outro Mod
                     </button>
                 </div>
             </div>
