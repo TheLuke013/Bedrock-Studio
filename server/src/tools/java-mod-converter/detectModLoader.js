@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import toml from 'toml';
-import { Loader, ModInfo } from './modInfo.js';
 
-function detectModLoader(dir) {
+import { Loader } from './modInfo.js';
+
+export function detectModLoader(dir) {
     const files = new Set();
 
     function walk(currentPath) {
@@ -33,7 +34,7 @@ function detectModLoader(dir) {
     return Loader.OTHER;
 }
 
-function detectFabricModInfo(modOutputDir, info) {
+export function detectFabricModInfo(modOutputDir, info) {
     const filePath = path.join(modOutputDir, 'fabric.mod.json');
     if (!fs.existsSync(filePath)) return;
 
@@ -49,29 +50,7 @@ function detectFabricModInfo(modOutputDir, info) {
     }
 }
 
-function detectOldForgeModInfo(modOutputDir, info) {
-    const filePath = path.join(modOutputDir, 'mcmod.info');
-    if (!fs.existsSync(filePath)) return;
-
-    const jsonText = fs.readFileSync(filePath, 'utf8');
-    let data;
-    try {
-        data = JSON.parse(jsonText);
-        if (Array.isArray(data)) data = data[0];
-    } catch {
-        return;
-    }
-
-    info.id = data.modid || null;
-    info.name = data.name || 'Mod Forge Antigo';
-    info.description = data.description || '';
-    info.version = data.version || '?';
-    info.authors = data.authorList || [];
-    info.license = null;
-    info.url = data.url || null;
-}
-
-function detectNewForgeModInfo(modOutputDir, info) {
+export function detectNewForgeModInfo(modOutputDir, info) {
     let modsTomlPath = null;
     function findToml(currentPath) {
         const entries = fs.readdirSync(currentPath, { withFileTypes: true });
@@ -100,41 +79,24 @@ function detectNewForgeModInfo(modOutputDir, info) {
     info.url = null;
 }
 
-export function convertingJavaModProcessing(modOutputDir, processId, callback) {
-    //* Processo de analise */
-    console.log(`Analisando mod em: ${modOutputDir}`);
+export function detectOldForgeModInfo(modOutputDir, info) {
+    const filePath = path.join(modOutputDir, 'mcmod.info');
+    if (!fs.existsSync(filePath)) return;
 
-    const info = new ModInfo();
-    info.loader = detectModLoader(modOutputDir);
-
-    switch (info.loader) {
-        case Loader.FABRIC:
-            detectFabricModInfo(modOutputDir, info);
-            break;
-
-        case Loader.OLD_FORGE:
-            detectOldForgeModInfo(modOutputDir, info);
-            break;
-
-        case Loader.NEW_FORGE:
-            detectNewForgeModInfo(modOutputDir, info);
-            break;
-
-        default:
-            info.name = "Mod Desconhecido";
-            info.description = "Não foi possível identificar o tipo do mod.";
-            info.version = "?.?.?";
+    const jsonText = fs.readFileSync(filePath, 'utf8');
+    let data;
+    try {
+        data = JSON.parse(jsonText);
+        if (Array.isArray(data)) data = data[0];
+    } catch {
+        return;
     }
 
-    console.log(info.getInfoString());
-
-    /* Processo de decompilação */
-    
-    callback({
-        name: info.name,
-        description: info.description,
-        version: info.version,
-        authors: info.authors,
-        loader: info.loader,
-    });
+    info.id = data.modid || null;
+    info.name = data.name || 'Mod Forge Antigo';
+    info.description = data.description || '';
+    info.version = data.version || '?';
+    info.authors = data.authorList || [];
+    info.license = null;
+    info.url = data.url || null;
 }

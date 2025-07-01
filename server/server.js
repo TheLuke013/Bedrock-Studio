@@ -6,7 +6,7 @@ const fs = require('fs');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 
-const { convertingJavaModProcessing } = require('./src/tools/java-mod-converter/server');
+const { convertingJavaModProcessing } = require('./src/tools/java-mod-converter/index');
 
 const app = express();
 const port = 3000;
@@ -17,12 +17,12 @@ app.use(express.json());
 app.use(fileUpload({
     limits: { fileSize: 100 * 1024 * 1024 },
     useTempFiles: true,
-    tempFileDir: path.join(__dirname, 'server/temp')
+    tempFileDir: path.join(__dirname, 'cache/temp')
 }));
 
 app.use(express.static(path.join(__dirname)));
 
-const ensureDirs = ['server/uploads', 'server/extracted', 'server/output', 'server/temp'];
+const ensureDirs = ['cache/uploads', 'cache/extracted', 'cache/output', 'cache/temp'];
 ensureDirs.forEach(dir => {
     const fullPath = path.join(__dirname, dir);
     if (!fs.existsSync(fullPath)) {
@@ -32,14 +32,14 @@ ensureDirs.forEach(dir => {
 
 const processingStatus = {};
 
-app.post('/upload', (req, res) => {
+app.post('/upload', async (req, res) => {
     if (!req.files || !req.files.modFile) {
         return res.status(400).json({ error: 'Nenhum arquivo enviado' });
     }
 
     const modFile = req.files.modFile;
     const processId = Date.now().toString();
-    const uploadPath = path.join(__dirname, 'server/uploads', `${processId}_${modFile.name}`);
+    const uploadPath = path.join(__dirname, 'cache/uploads', `${processId}_${modFile.name}`);
 
     processingStatus[processId] = {
         step: 'Recebendo arquivo',
@@ -47,7 +47,7 @@ app.post('/upload', (req, res) => {
         message: 'Iniciando processamento...'
     };
 
-    modFile.mv(uploadPath, (err) => {
+    modFile.mv(uploadPath, async (err) => {
         if (err) {
             return res.status(500).json({ error: 'Erro ao salvar arquivo' });
         }
@@ -60,7 +60,7 @@ app.post('/upload', (req, res) => {
 
         try {
             const zip = new AdmZip(uploadPath);
-            const outputDir = path.join(__dirname, 'server/extracted', processId);
+            const outputDir = path.join(__dirname, 'cache/extracted', processId);
             
             if (!fs.existsSync(outputDir)) {
                 fs.mkdirSync(outputDir, { recursive: true });
@@ -83,7 +83,7 @@ app.post('/upload', (req, res) => {
                 
                 setTimeout(() => {
                     const convertedFileName = `converted-${result.name}.mcaddon`;
-                    const convertedFilePath = path.join(__dirname, 'server/output', convertedFileName);
+                    const convertedFilePath = path.join(__dirname, 'cache/output', convertedFileName);
                     
                     const outputZip = new AdmZip();
                     outputZip.addFile('manifest.json', Buffer.from(JSON.stringify({
@@ -110,20 +110,22 @@ app.post('/upload', (req, res) => {
                         step: 'Concluído',
                         progress: 100,
                         message: 'Conversão finalizada com sucesso!',
-                        downloadUrl: `/server/output/${convertedFileName}`,
+                        downloadUrl: `/cache/output/${convertedFileName}`,
                         modInfo: result
                     };
                     
                     res.json({
                         success: true,
                         processId,
-                        downloadUrl: `/server/output/${convertedFileName}`,
+                        downloadUrl: `/cache/output/${convertedFileName}`,
                         modInfo: result
                     });
                 }, 3000);
             });
+            console.log("Processo concluido com sucesso");
         } catch (error) {
             res.status(500).json({ error: `Erro ao processar arquivo: ${error.message}` });
+            console.log(`Erro ao processar arquivo: ${error.message}`);
         }
     });
 });
@@ -138,9 +140,9 @@ app.get('/status/:processId', (req, res) => {
     }
 });
 
-app.get('/server/output/:filename', (req, res) => {
+app.get('/cache/output/:filename', (req, res) => {
     const filename = req.params.filename;
-    const filePath = path.join(__dirname, 'server/output', filename);
+    const filePath = path.join(__dirname, 'cache/output', filename);
     
     if (fs.existsSync(filePath)) {
         res.download(filePath, filename);
@@ -151,5 +153,5 @@ app.get('/server/output/:filename', (req, res) => {
 
 app.listen(port, () => {
     console.log(`Servidor rodando em http://localhost:${port}`);
-    console.log(`Link para página: http://localhost:${port}/index.html`);
+    console.log(`Link para página: http://localhost:${port}/client/index.html\n`);
 });
